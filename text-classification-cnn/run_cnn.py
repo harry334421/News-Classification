@@ -22,11 +22,10 @@ val_dir = os.path.join(base_dir, 'cnews.val.txt')
 vocab_dir = os.path.join(base_dir, 'cnews.vocab.txt')
 
 save_dir = 'checkpoints/textcnn'
-save_path = os.path.join(save_dir, 'best_validation')  # 最佳验证结果保存路径
+save_path = os.path.join(save_dir, 'best_validation')  
 
 
 def get_time_dif(start_time):
-    """获取已使用时间"""
     end_time = time.time()
     time_dif = end_time - start_time
     return timedelta(seconds=int(round(time_dif)))
@@ -42,7 +41,7 @@ def feed_data(x_batch, y_batch, keep_prob):
 
 
 def evaluate(sess, x_, y_):
-    """评估在某一数据上的准确率和损失"""
+    """准确率和损失"""
     data_len = len(x_)
     batch_eval = batch_iter(x_, y_, 128)
     total_loss = 0.0
@@ -59,7 +58,6 @@ def evaluate(sess, x_, y_):
 
 def train():
     print("Configuring TensorBoard and Saver...")
-    # 配置 Tensorboard，重新训练时，请将tensorboard文件夹删除，不然图会覆盖
     tensorboard_dir = 'tensorboard/textcnn'
     if not os.path.exists(tensorboard_dir):
         os.makedirs(tensorboard_dir)
@@ -130,11 +128,11 @@ def train():
             total_batch += 1
 
             if total_batch - last_improved > require_improvement:
-                # 验证集正确率长期不提升，提前结束训练
+                # 正确率不提升，提前结束训练
                 print("No optimization for a long time, auto-stopping...")
                 flag = True
                 break  # 跳出循环
-        if flag:  # 同上
+        if flag:  
             break
 
 
@@ -185,7 +183,7 @@ if __name__ == '__main__':
     if len(sys.argv) != 2 or sys.argv[1] not in ['train', 'test']:
         raise ValueError("""usage: python run_cnn.py [train / test]""")
 
-    print('Configuring CNN model...')
+    print('Configuring model...')
     config = TCNNConfig()
     if not os.path.exists(vocab_dir):  # 如果不存在词汇表，重建
         build_vocab(train_dir, vocab_dir, config.vocab_size)

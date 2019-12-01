@@ -4,7 +4,6 @@ import tensorflow as tf
 
 
 class TCNNConfig(object):
-    """CNN配置参数"""
 
     embedding_dim = 64  # 词向量维度
     seq_length = 600  # 序列长度
@@ -26,7 +25,6 @@ class TCNNConfig(object):
 
 
 class TextCNN(object):
-    """文本分类，CNN模型"""
 
     def __init__(self, config):
         self.config = config
@@ -39,7 +37,6 @@ class TextCNN(object):
         self.cnn()
 
     def cnn(self):
-        """CNN模型"""
         # 词向量映射
         with tf.device('/cpu:0'):
             embedding = tf.get_variable('embedding', [self.config.vocab_size, self.config.embedding_dim])
@@ -52,7 +49,6 @@ class TextCNN(object):
             gmp = tf.reduce_max(conv, reduction_indices=[1], name='gmp')
 
         with tf.name_scope("score"):
-            # 全连接层，后面接dropout以及relu激活
             fc = tf.layers.dense(gmp, self.config.hidden_dim, name='fc1')
             fc = tf.contrib.layers.dropout(fc, self.keep_prob)
             fc = tf.nn.relu(fc)
